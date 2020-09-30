@@ -9,16 +9,14 @@ from sklearn import metrics
 import seaborn as sns
 
 
-def visualize(df):
-    selectors = ['variety', 'pred']
-    for element in range(len(selectors)):
-        s = sns.scatterplot(data=df, x="petal.length", y="petal.width", hue=df[selectors[element]].tolist())
-        fig = s.get_figure()
-        fig.savefig('image/' + selectors[element] + '.png')
-        fig.clf()
+def visualize(df, n_cluster):
+    s = sns.scatterplot(data=df, x="petal.length", y="petal.width", hue=df['pres'].tolist())
+    fig = s.get_figure()
+    fig.savefig('image/kmeans_clusters_{}.png'.format(n_cluster))
+    fig.clf()
 
-def apply_model(x):
-    Model = KMeans(n_clusters=3)
+def apply_model(x, k):
+    Model = KMeans(k)
     Model.fit(x)
     return Model
 
@@ -40,19 +38,21 @@ if __name__ == "__main__":
     df = pd.read_csv('dataset/iris.csv', sep = ",")
     x = df[['sepal.length','sepal.width','petal.length','petal.width']]
     
-    # Apply model
-    Model = apply_model(x)
 
-    # Save result in a column
-    df['pred'] = Model.labels_
+    for n_cluster in [2,3,4]:
+        # Apply model
+        Model = apply_model(x, n_cluster)
 
-    # Save results in png file
-    visualize(df)
+        # Save result in a column
+        df['pred'] = Model.labels_
+
+        # Save results in png file
+        visualize(df, n_cluster)
     
-    # Calculate purity
-    purity_value = purity(df)
+        # Calculate purity
+        purity_value = purity(df)
 
-    print('The purity value is: ', purity_value)
+        print('The purity value with {} clusters is: '.format(str(n_cluster)), purity_value)
 
 
 
