@@ -10,7 +10,7 @@ import seaborn as sns
 
 
 def visualize(df, n_cluster):
-    s = sns.scatterplot(data=df, x="petal.length", y="petal.width", hue=df['pres'].tolist())
+    s = sns.scatterplot(data=df, x="petal.length", y="petal.width", hue=df['pred'].tolist())
     fig = s.get_figure()
     fig.savefig('image/kmeans_clusters_{}.png'.format(n_cluster))
     fig.clf()
@@ -30,7 +30,7 @@ def select(x):
 
 def purity(df):
     df['pred'].apply(lambda x: select(x))
-    confusion_matrix = metrics.cluster.contingency_matrix(df['variety'], df['pred'])s
+    confusion_matrix = metrics.cluster.contingency_matrix(df['variety'], df['pred'])
     return np.sum(np.amax(confusion_matrix, axis=0)) / np.sum(confusion_matrix) 
 
 if __name__ == "__main__":
