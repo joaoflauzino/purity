@@ -32,15 +32,14 @@ def select(x):
 
 def purity(df):
     df['pred'].apply(lambda x: select(x))
-    confusion_matrix = metrics.cluster.contingency_matrix(df['variety'], df['pred'])
+    confusion_matrix = metrics.cluster.contingency_matrix(df['variety'], df['pred'])s
     return np.sum(np.amax(confusion_matrix, axis=0)) / np.sum(confusion_matrix) 
 
 if __name__ == "__main__":
     
     df = pd.read_csv('dataset/iris.csv', sep = ",")
     x = df[['sepal.length','sepal.width','petal.length','petal.width']]
-    y = df[['variety']]
-
+    
     # Apply model
     Model = apply_model(x)
 
