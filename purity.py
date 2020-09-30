@@ -20,12 +20,15 @@ def apply_model(x, k):
 # Function to calculate purity
 def purity_metric(target, prediction):
    
-    majority_sum = 0  
+    sum_highest_value = 0  
     for cl in set(prediction):
-        labels_cl = Counter(l for l, c in zip(target, prediction) if c == cl)
-        majority_sum += max(labels_cl.values())
+        cluster_labels = Counter(
+            k for k, v in zip(target, prediction) 
+            if v == cl
+        )
+        sum_highest_value += max(cluster_labels.values())
 
-    return majority_sum / len(prediction)
+    return sum_highest_value / len(prediction)
 
 
 if __name__ == "__main__":
