@@ -4,6 +4,31 @@ from sklearn.cluster import KMeans
 from sklearn import metrics
 import seaborn as sns
 from collections import Counter
+import argparse
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-inputFile',
+        default='iris.csv',
+        type=str,
+        help='name of file that will be worked')
+    parser.add_argument(
+        '-sep',
+        default=',',
+        help='column identifier')
+    parser.add_argument(
+        '-dec',
+        default='.',
+        help='decimal identifier')
+
+    parser.add_argument(
+        '-target',
+        default='variety',
+        type=str,
+        help='target')
+
+    return parser.parse_args()
 
 # Function to visualize groups
 def visualize(df, Model, n_cluster):
@@ -32,10 +57,15 @@ def purity_metric(target, prediction):
 
 
 if __name__ == "__main__":
+
+    args = get_args()
+
+    # Reading dataset
+    df = pd.read_csv('dataset/' + args.inputFile, sep=args.sep, decimal=args.dec)
     
-    df = pd.read_csv('dataset/iris.csv', sep = ",")
-    x = df[['sepal.length','sepal.width','petal.length','petal.width']]
-    
+    # Selecting just numeric values
+    x = df.select_dtypes(exclude=['object'])
+
     # Running k-means for each cluster number
     for n_cluster in [2,3,4]:
         # Apply model
@@ -43,7 +73,7 @@ if __name__ == "__main__":
         # Saving results in png file
         visualize(df, Model, n_cluster)
         # Calculating purity
-        purity_value = purity_metric(df['variety'], Model)
+        purity_value = purity_metric(df[args.target], Model)
    
         print('The purity value with {} clusters is: '.format(str(n_cluster)), purity_value)
 
