@@ -32,7 +32,7 @@ def get_args():
 
 # Function to visualize groups
 def visualize(df, Model, n_cluster):
-    s = sns.scatterplot(data=df, x="petal.length", y="petal.width", hue=Model)
+    s = sns.scatterplot(data=x, x=x.columns[0], y=x.columns[1], hue=Model)
     fig = s.get_figure()
     fig.savefig('image/kmeans_clusters_{}.png'.format(n_cluster))
     fig.clf()
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         # Apply model
         Model = apply_model(x, n_cluster)
         # Saving results in png file
-        visualize(df, Model, n_cluster)
+        visualize(x, Model, n_cluster)
         # Calculating purity
         purity_value = purity_metric(df[args.target], Model)
    
